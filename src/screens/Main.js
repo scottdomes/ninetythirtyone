@@ -1,41 +1,34 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
-} from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { getTodaysDate } from '../utils/date';
 import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 import { scheduleMorningNotification } from '../utils/notify';
 import * as firebase from 'firebase';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import DayView from './DayView'
 
-const Icon = ({ isComplete, toggleCompletion }) => {
-  return (
-    <TouchableWithoutFeedback onPress={toggleCompletion}>
-      <Ionicons
-        name="md-checkmark-circle"
-        size={32}
-        color={isComplete ? 'green' : 'black'}
-      />
-    </TouchableWithoutFeedback>
-  );
-};
+const Tab = createBottomTabNavigator();
 
-const GoalDisplay = ({ goal, toggleCompletion }) => {
-  return (
-    <View style={styles.goal}>
-      <Text>{goal.name}</Text>
-      <Icon isComplete={goal.complete} toggleCompletion={toggleCompletion} />
-    </View>
-  );
-};
-
-export default class DayView extends React.Component {
-  state = { loaded: false, goals: [] };
+export default class MainView extends React.Component {
+  state = {
+    loaded: false,
+    goals: [
+      {
+        name: '',
+        complete: false,
+      },
+      {
+        name: '',
+        complete: false,
+      },
+      {
+        name: '',
+        complete: false,
+      },
+    ],
+  };
 
   componentDidMount() {
     this.checkForUser();
@@ -93,7 +86,7 @@ export default class DayView extends React.Component {
         const goalObject = data.val();
 
         if (!goalObject) {
-          return this.props.navigation.navigate('NinetyDayEntry');
+          return this.setState({ loaded: true });
         }
 
         const dateKey = Object.keys(goalObject)[0];
@@ -101,20 +94,11 @@ export default class DayView extends React.Component {
         if (dateKey === getTodaysDate()) {
           this.setState({ loaded: true, goals: goalObject[dateKey] });
         } else {
-          this.props.navigation.navigate('NinetyDayEntry', {
-            previousGoals: goalObject[dateKey],
-          });
+          const activeGoals = goalObject[dateKey].filter(
+            (goal) => !goal.complete
+          );
+          this.setState({ loaded: true, goals: activeGoals });
         }
-      });
-  }
-
-  toggleCompletion(category, index, goal) {
-    firebase
-      .database()
-      .ref(`/users/${this.userId}/${getTodaysDate()}/${category}/${index}`)
-      .set({
-        ...goal,
-        complete: !goal.complete,
       });
   }
 
@@ -127,48 +111,10 @@ export default class DayView extends React.Component {
       );
     }
 
-    const ninetyDayGoals = this.state.goals.ninety;
     return (
-      <View style={styles.container}>
-        {this.state.goals.ninety.map((goal, i) => {
-          return (
-            <GoalDisplay
-              key={`90${i}`}
-              goal={goal}
-              toggleCompletion={() => this.toggleCompletion('ninety', i, goal)}
-            />
-          );
-        })}
-        {this.state.goals.thirty.map((goal, i) => {
-          return (
-            <GoalDisplay
-              key={`30${i}`}
-              goal={goal}
-              toggleCompletion={() => this.toggleCompletion('thirty', i, goal)}
-            />
-          );
-        })}
-        {this.state.goals.one.map((goal, i) => {
-          return (
-            <GoalDisplay
-              key={`1${i}`}
-              goal={goal}
-              toggleCompletion={() => this.toggleCompletion('one', i, goal)}
-            />
-          );
-        })}
-        <TouchableWithoutFeedback
-          onPressIn={() =>
-            this.props.navigation.navigate('NinetyDayEntry', {
-              previousGoals: this.state.goals,
-            })
-          }>
-          <Text>Edit</Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPressIn={() => firebase.auth().signOut()}>
-          <Text>Logout</Text>
-        </TouchableWithoutFeedback>
-      </View>
+      <Tab.Navigator>
+        <Tab.Screen name="DayView" component={DayView} />
+      </Tab.Navigator>
     );
   }
 }
