@@ -7,9 +7,9 @@ const GoalCheckmark = ({ isComplete, toggleCompletion }) => {
     <TouchableWithoutFeedback onPress={toggleCompletion}>
       <Ionicons
         style={styles.container}
-        name="md-checkmark-circle"
+        name={isComplete ? "ios-checkmark-circle" :"ios-checkmark-circle-outline"}
         size={32}
-        color={isComplete ? '#3F5EFB' : 'white'}
+        color="white"
       />
     </TouchableWithoutFeedback>
   );

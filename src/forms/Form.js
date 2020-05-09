@@ -39,9 +39,16 @@ const getInitialState = (fieldKeys) => {
 const animationTimeout = () =>
   new Promise((resolve) => setTimeout(resolve, 700));
 
-const Form = ({ fields, buttonText, action, afterSubmit }) => {
+const Form = ({
+  fields,
+  buttonText,
+  action,
+  afterSubmit,
+  disableSubmitUntilChange,
+}) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialValues(fields));
+  const [hasChanged, setHasChanged] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [validationErrors, setValidationErrors] = useState(
     getInitialState(fieldKeys)
@@ -52,6 +59,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const onChangeValue = (key, value) => {
     const newState = { ...values, [key]: value };
     setValues(newState);
+    setHasChanged(true);
 
     if (validationErrors[key]) {
       const newErrors = { ...validationErrors, [key]: '' };
@@ -91,6 +99,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
       await afterSubmit(result);
       fadeIn();
       setSubmitting(false);
+      setHasChanged(false);
     } catch (e) {
       setErrorMessage(e.message);
       setSubmitting(false);
@@ -128,6 +137,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
           title={buttonText}
           onPress={submit}
           isSubmitting={isSubmitting}
+          disabled={disableSubmitUntilChange && !hasChanged}
         />
       </View>
     </KeyboardAvoidingView>

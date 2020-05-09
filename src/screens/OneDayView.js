@@ -16,6 +16,10 @@ import { getTodaysDate } from '../utils/date';
 class OneDayView extends React.Component {
   static contextType = GoalContext;
 
+  state = {
+    hasChanged: false,
+  };
+
   async toggleCompletion(category, index, goal) {
     const user = await firebase.auth().currentUser;
 
@@ -33,7 +37,7 @@ class OneDayView extends React.Component {
     this.context.one.forEach((goal, i) => {
       goalFields[i] = {
         label: '',
-        defaultValue: goal.complete ? '' : `${goal.name}`,
+        defaultValue: goal.name,
         validators: [validateContent],
         complete: goal.complete,
         icon: (
@@ -47,13 +51,14 @@ class OneDayView extends React.Component {
     return (
       <View style={styles.container}>
         <Form
+          disableSubmitUntilChange
           action={async (goal1, goal2, goal3) => {
             const user = await firebase.auth().currentUser;
             const userId = user.uid;
             const finalGoals = {
-              0: { name: goal1, complete: false },
-              1: { name: goal2, complete: false },
-              2: { name: goal3, complete: false },
+              0: { name: goal1, complete: goalFields[0].complete },
+              1: { name: goal2, complete: goalFields[1].complete },
+              2: { name: goal3, complete: goalFields[2].complete },
             };
             return firebase
               .database()

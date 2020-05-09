@@ -10,11 +10,15 @@ import {
 import AnimatedGradient from './AnimatedGradient';
 import { GRADIENT_COLORS, GRADIENT_ORIENTATIONS } from './constants';
 
-const SubmitButton = ({ title, onPress, isSubmitting }) => {
+const SubmitButton = ({ title, onPress, isSubmitting, disabled }) => {
   const [offset] = useState(new Animated.Value(1));
   const [scale] = useState(new Animated.Value(1));
 
   const handlePress = async () => {
+    if (disabled) {
+      return;
+    }
+
     Animated.spring(offset, {
       toValue: 5,
     }).start();
@@ -39,14 +43,18 @@ const SubmitButton = ({ title, onPress, isSubmitting }) => {
 
   return (
     <TouchableWithoutFeedback onPressIn={handlePress}>
-      <Animated.View style={{ transform, ...styles.container }}>
+      <Animated.View
+        style={
+          disabled
+            ? { transform, ...styles.container, ...styles.disabled }
+            : { transform, ...styles.container }
+        }>
         <AnimatedGradient
           orientation={
             isSubmitting ? GRADIENT_ORIENTATIONS[1] : GRADIENT_ORIENTATIONS[0]
           }
           colors={GRADIENT_COLORS}
-          style={{ borderRadius: 8 }}
-        >
+          style={{ borderRadius: 8 }}>
           <View style={styles.container}>
             {isSubmitting ? (
               <ActivityIndicator size="small" color="#FFFFFF" />
@@ -81,6 +89,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  disabled: {
+    opacity: 0.5,
   },
 });
 
