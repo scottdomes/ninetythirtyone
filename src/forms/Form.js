@@ -30,7 +30,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const [values, setValues] = useState(getInitialState(fieldKeys));
   const [errorMessage, setErrorMessage] = useState('');
   const [validationErrors, setValidationErrors] = useState(
-    getInitialState(fieldKeys),
+    getInitialState(fieldKeys)
   );
   const [opacity] = useState(new Animated.Value(1));
   const [isSubmitting, setSubmitting] = useState(false);
@@ -85,8 +85,10 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-      <Text style={styles.error}>{errorMessage}</Text>
-      <Animated.View style={{ opacity }}>
+      <View style={{ flex: 1, justifyContent: 'flex-end', width: 300 }}>
+        <Text style={styles.error}>{errorMessage}</Text>
+      </View>
+      <Animated.View style={{ opacity}}>
         {isSubmitting && (
           <View style={styles.activityIndicatorContainer}>
             <ActivityIndicator size="large" color="#3F5EFB" />
@@ -106,11 +108,13 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
           );
         })}
       </Animated.View>
-      <SubmitButton
-        title={buttonText}
-        onPress={submit}
-        isSubmitting={isSubmitting}
-      />
+      <View style={{ flex: 1 }}>
+        <SubmitButton
+          title={buttonText}
+          onPress={submit}
+          isSubmitting={isSubmitting}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -136,7 +140,6 @@ const styles = StyleSheet.create({
   },
   error: {
     marginBottom: 20,
-    height: 17.5,
   },
 });
 

@@ -77,7 +77,7 @@ export default class Field extends React.Component {
             onChangeText={(text) => onChangeText(fieldName, text)}
           />
         </AnimatedGradient>
-        <Text style={styles.error}>{error}</Text>
+        <View style={{flexDirection:'row'}}><Text style={styles.error}>{error}</Text></View>
       </Animated.View>
     );
   }
@@ -107,5 +107,5 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
-  error: { textAlign: 'center', height: 17.5 },
+  error: { textAlign: 'center', height: 17.5},
 });
