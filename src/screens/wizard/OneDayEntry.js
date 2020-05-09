@@ -8,15 +8,8 @@ import {
 } from 'react-native';
 import Form from '../../forms/Form';
 import { validateContent } from '../../forms/validation';
-
+import { getTodaysDate } from '../../utils/date';
 import * as firebase from 'firebase';
-
-const todaysDate = () => {
-  const month = new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
-  const date = new Date().getDate() + 1;
-  return `${year}-${month}-${date}`;
-};
 
 export default class OneDayEntry extends React.Component {
   state = { loaded: false, goal: '' };
@@ -62,7 +55,7 @@ export default class OneDayEntry extends React.Component {
             };
             return firebase
               .database()
-              .ref(`/users/${userId}/${todaysDate()}`)
+              .ref(`/users/${userId}/${getTodaysDate()}`)
               .set(finalGoals);
           }}
           afterSubmit={(goalObject) => {

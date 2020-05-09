@@ -6,15 +6,9 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
+import { getTodaysDate } from '../utils/date';
 
 import * as firebase from 'firebase';
-
-const todaysDate = () => {
-  const month = new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
-  const date = new Date().getDate() + 1;
-  return `${year}-${month}-${date}`;
-};
 
 export default class DayView extends React.Component {
   state = { loaded: false, goals: [] };
@@ -32,20 +26,21 @@ export default class DayView extends React.Component {
     });
   }
 
-  async checkForTodaysData(userId) {
-    const date = todaysDate();
+  checkForTodaysData(userId) {
+    const date = getTodaysDate();
     console.log(userId, date);
-    const data = await firebase
+    firebase
       .database()
       .ref(`/users/${userId}/${date}`)
-      .once('value');
-    const goals = data.val()
+      .on('value', (data) => {
+        const goals = data.val();
 
-    if (goals) {
-      this.setState({ loaded: true, goals });
-    } else {
-      this.props.navigation.navigate('NinetyDayEntry');
-    }
+        if (goals) {
+          this.setState({ loaded: true, goals });
+        } else {
+          this.props.navigation.navigate('NinetyDayEntry');
+        }
+      });
   }
 
   render() {
@@ -60,10 +55,17 @@ export default class DayView extends React.Component {
     const ninetyDayGoals = this.state.goals.ninety;
     return (
       <View>
-        {ninetyDayGoals.map((goal) => {
+        {this.state.goals.ninety.map((goal) => {
           return <Text key={goal}>{goal}</Text>;
         })}
-
+        {this.state.goals.thirty.map((goal) => {
+          return <Text key={goal}>{goal}</Text>;
+        })}
+        <Text>{this.state.goals.one}</Text>
+        <TouchableWithoutFeedback
+          onPressIn={() => this.props.navigation.navigate('NinetyDayEntry')}>
+          <Text>Edit</Text>
+        </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPressIn={() => firebase.auth().signOut()}>
           <Text>Logout</Text>
         </TouchableWithoutFeedback>

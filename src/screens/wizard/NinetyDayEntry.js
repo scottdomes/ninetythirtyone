@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import Form from '../../forms/Form';
 import { validateContent } from '../../forms/validation';
-
 import * as firebase from 'firebase';
 
 export default class NinetyDayView extends React.Component {
@@ -19,15 +18,17 @@ export default class NinetyDayView extends React.Component {
 
   async loadPreviousGoals() {
     const user = await firebase.auth().currentUser;
-    const data = await firebase
+    firebase
       .database()
       .ref(`/users/${user.uid}/`)
       .limitToLast(1)
-      .once('value');
-    const goalObject = data.val();
-    const lastDateKey = Object.keys(goalObject)[0];
-    const goals = goalObject[lastDateKey].ninety;
-    this.setState({ loaded: true, goals });
+      .on('value', (data) => {
+        const goalObject = data.val();
+        console.log(goalObject);
+        const lastDateKey = Object.keys(goalObject)[0];
+        const goals = goalObject[lastDateKey].ninety;
+        this.setState({ loaded: true, goals });
+      });
   }
 
   render() {
