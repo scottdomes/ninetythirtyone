@@ -19,4 +19,7 @@ const firebaseConfig = {
   measurementId: 'G-PZZEZVF4PG',
 };
 
-export const initialize = () => firebase.initializeApp(firebaseConfig);
+export const initialize = () => {
+  firebase.initializeApp(firebaseConfig);
+  firebase.auth().settings.isAppVerificationDisabledForTesting = true;
+};
