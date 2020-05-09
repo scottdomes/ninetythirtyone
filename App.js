@@ -6,6 +6,9 @@ import PhoneEntry from './src/screens/PhoneEntry';
 import VerificationEntry from './src/screens/VerificationEntry';
 import DayView from './src/screens/DayView';
 
+import NinetyDayEntry from './src/screens/wizard/NinetyDayEntry';
+
+
 initialize();
 
 const Stack = createStackNavigator();
@@ -17,6 +20,7 @@ function App() {
         <Stack.Screen name="PhoneEntry" component={PhoneEntry} />
         <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
         <Stack.Screen name="DayView" component={DayView} />
+        <Stack.Screen name="NinetyDayEntry" component={NinetyDayEntry} />
       </Stack.Navigator>
     </NavigationContainer>
   );

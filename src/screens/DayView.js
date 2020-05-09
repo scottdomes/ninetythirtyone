@@ -12,12 +12,12 @@ import * as firebase from 'firebase';
 const todaysDate = () => {
   const month = new Date().getMonth() + 1;
   const year = new Date().getFullYear();
-  const date = new Date().getDate();
+  const date = new Date().getDate() + 1;
   return `${year}-${month}-${date}`;
 };
 
 export default class DayView extends React.Component {
-  state = { loaded: false, goals: {} };
+  state = { loaded: false, goals: [] };
   componentDidMount() {
     this.checkForUser();
   }
@@ -35,18 +35,26 @@ export default class DayView extends React.Component {
   async checkForTodaysData(userId) {
     const date = todaysDate();
     console.log(userId, date);
-    const goals = await firebase
+    const data = await firebase
       .database()
       .ref(`/users/${userId}/${date}`)
       .once('value');
-    this.setState({ loaded: true, goals: goals.val() });
+    const goals = data.val()
+
+    if (goals) {
+      this.setState({ loaded: true, goals });
+    } else {
+      this.props.navigation.navigate('NinetyDayEntry');
+    }
   }
 
   render() {
     if (!this.state.loaded) {
-      return <View style={styles.activityIndicatorContainer}>
-        <ActivityIndicator size="large" color="#3F5EFB" />
-      </View>;
+      return (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size="large" color="#3F5EFB" />
+        </View>
+      );
     }
 
     const ninetyDayGoals = this.state.goals.ninety;

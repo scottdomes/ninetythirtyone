@@ -13,6 +13,20 @@ import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
 import SubmitButton from './SubmitButton';
 
+const getInitialValues = (fields) => {
+  const fieldKeys = Object.keys(fields);
+  const state = {};
+  fieldKeys.forEach((key) => {
+    if (fields[key].defaultValue) {
+      state[key] = fields[key].defaultValue;
+    } else {
+      state[key] = '';
+    }
+  });
+
+  return state;
+};
+
 const getInitialState = (fieldKeys) => {
   const state = {};
   fieldKeys.forEach((key) => {
@@ -27,7 +41,7 @@ const animationTimeout = () =>
 
 const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const fieldKeys = Object.keys(fields);
-  const [values, setValues] = useState(getInitialState(fieldKeys));
+  const [values, setValues] = useState(getInitialValues(fields));
   const [errorMessage, setErrorMessage] = useState('');
   const [validationErrors, setValidationErrors] = useState(
     getInitialState(fieldKeys)
@@ -88,7 +102,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
       <View style={{ flex: 1, justifyContent: 'flex-end', width: 300 }}>
         <Text style={styles.error}>{errorMessage}</Text>
       </View>
-      <Animated.View style={{ opacity}}>
+      <Animated.View style={{ opacity }}>
         {isSubmitting && (
           <View style={styles.activityIndicatorContainer}>
             <ActivityIndicator size="large" color="#3F5EFB" />
