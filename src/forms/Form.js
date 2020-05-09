@@ -90,6 +90,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
       ]);
       await afterSubmit(result);
       fadeIn();
+      setSubmitting(false);
     } catch (e) {
       setErrorMessage(e.message);
       setSubmitting(false);

@@ -60,11 +60,14 @@ export default class Field extends React.Component {
               translateX: this.position,
             },
           ],
+          opacity: field.complete ? 0.5 : 1,
         }}>
         <Text>{field.label}</Text>
         <AnimatedGradient
           orientation={
-            isSubmitting ? GRADIENT_ORIENTATIONS[1] : GRADIENT_ORIENTATIONS[0]
+            isSubmitting || field.complete
+              ? GRADIENT_ORIENTATIONS[1]
+              : GRADIENT_ORIENTATIONS[0]
           }
           colors={GRADIENT_COLORS}
           style={styles.inputGradient}>

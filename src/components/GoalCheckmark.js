@@ -9,7 +9,7 @@ const GoalCheckmark = ({ isComplete, toggleCompletion }) => {
         style={styles.container}
         name="md-checkmark-circle"
         size={32}
-        color={isComplete ? 'green' : 'white'}
+        color={isComplete ? '#3F5EFB' : 'white'}
       />
     </TouchableWithoutFeedback>
   );
