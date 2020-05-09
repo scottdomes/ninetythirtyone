@@ -7,8 +7,30 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { getTodaysDate } from '../utils/date';
+import { Ionicons } from '@expo/vector-icons';
 
 import * as firebase from 'firebase';
+
+const Icon = ({ isComplete, toggleCompletion }) => {
+  return (
+    <TouchableWithoutFeedback onPress={toggleCompletion}>
+      <Ionicons
+        name="md-checkmark-circle"
+        size={32}
+        color={isComplete ? 'green' : 'black'}
+      />
+    </TouchableWithoutFeedback>
+  );
+};
+
+const GoalDisplay = ({ goal, toggleCompletion }) => {
+  return (
+    <View style={styles.goal}>
+      <Text>{goal.name}</Text>
+      <Icon isComplete={goal.complete} toggleCompletion={toggleCompletion} />
+    </View>
+  );
+};
 
 export default class DayView extends React.Component {
   state = { loaded: false, goals: [] };
@@ -19,20 +41,36 @@ export default class DayView extends React.Component {
   checkForUser() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.checkForTodaysData(user.uid);
+        this.userId = user.uid;
+        this.checkForTodaysData();
       } else {
         this.props.navigation.navigate('PhoneEntry');
       }
     });
   }
 
-  checkForTodaysData(userId) {
+  componentWillUnmount() {
+    if (this.userId) {
+      firebase
+        .database()
+        .ref(`/users/${this.userId}/`)
+        .limitToLast(1)
+        .off('value');
+    }
+  }
+
+  checkForTodaysData() {
     firebase
       .database()
-      .ref(`/users/${userId}/`)
+      .ref(`/users/${this.userId}/`)
       .limitToLast(1)
       .on('value', (data) => {
         const goalObject = data.val();
+
+        if (!goalObject) {
+          return this.props.navigation.navigate('NinetyDayEntry');
+        }
+
         const dateKey = Object.keys(goalObject)[0];
 
         if (dateKey === getTodaysDate()) {
@@ -42,6 +80,16 @@ export default class DayView extends React.Component {
             previousGoals: goalObject[dateKey],
           });
         }
+      });
+  }
+
+  toggleCompletion(category, index, goal) {
+    firebase
+      .database()
+      .ref(`/users/${this.userId}/${getTodaysDate()}/${category}/${index}`)
+      .set({
+        ...goal,
+        complete: !goal.complete,
       });
   }
 
@@ -56,15 +104,21 @@ export default class DayView extends React.Component {
 
     const ninetyDayGoals = this.state.goals.ninety;
     return (
-      <View>
-        {this.state.goals.ninety.map((goal) => {
-          return <Text key={goal}>{goal}</Text>;
+      <View style={styles.container}>
+        {this.state.goals.ninety.map((goal, i) => {
+          return (
+            <GoalDisplay
+              key={`90${i}`}
+              goal={goal}
+              toggleCompletion={() => this.toggleCompletion('ninety', i, goal)}
+            />
+          );
         })}
-        {this.state.goals.thirty.map((goal) => {
-          return <Text key={goal}>{goal}</Text>;
+        {this.state.goals.thirty.map((goal, i) => {
+          return <GoalDisplay key={`30${i}`} goal={goal} />;
         })}
-        {this.state.goals.one.map((goal) => {
-          return <Text key={goal}>{goal}</Text>;
+        {this.state.goals.one.map((goal, i) => {
+          return <GoalDisplay key={`1${i}`} goal={goal} />;
         })}
         <TouchableWithoutFeedback
           onPressIn={() =>
@@ -86,9 +140,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 15,
     marginBottom: 15,
     position: 'relative',
+  },
+  goal: {
+    marginBottom: 20,
   },
   activityIndicatorContainer: {
     position: 'absolute',

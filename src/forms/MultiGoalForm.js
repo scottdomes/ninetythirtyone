@@ -17,7 +17,11 @@ const MultiGoalForm = ({ afterSubmit, previousGoals }) => {
     <View style={styles.container}>
       <Form
         action={(goal1, goal2, goal3) =>
-          Promise.resolve({ 0: goal1, 1: goal2, 2: goal3 })
+          Promise.resolve({
+            0: { name: goal1, complete: false },
+            1: { name: goal2, complete: false },
+            2: { name: goal3, complete: false },
+          })
         }
         afterSubmit={afterSubmit}
         buttonText="Commit"

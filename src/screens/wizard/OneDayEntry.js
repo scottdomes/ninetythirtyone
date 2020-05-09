@@ -31,7 +31,11 @@ const OneDayEntry = ({ navigation, route }) => {
           const finalGoals = {
             ninety,
             thirty,
-            one: { 0: goal1, 1: goal2, 2: goal3 },
+            one: {
+              0: { name: goal1, complete: false },
+              1: { name: goal2, complete: false },
+              2: { name: goal3, complete: false },
+            },
           };
           return firebase
             .database()
