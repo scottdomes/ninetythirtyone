@@ -1,17 +1,25 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const GoalCheckmark = ({ isComplete, toggleCompletion }) => {
   return (
     <TouchableWithoutFeedback onPress={toggleCompletion}>
       <Ionicons
+        style={styles.container}
         name="md-checkmark-circle"
         size={32}
-        color={isComplete ? 'green' : 'black'}
+        color={isComplete ? 'green' : 'white'}
       />
     </TouchableWithoutFeedback>
   );
 };
 
 export default GoalCheckmark;
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 7,
+    marginLeft: 10
+  },
+});

@@ -60,24 +60,26 @@ export default class Field extends React.Component {
               translateX: this.position,
             },
           ],
-        }}
-      >
+        }}>
         <Text>{field.label}</Text>
         <AnimatedGradient
           orientation={
             isSubmitting ? GRADIENT_ORIENTATIONS[1] : GRADIENT_ORIENTATIONS[0]
           }
           colors={GRADIENT_COLORS}
-          style={styles.inputGradient}
-        >
+          style={styles.inputGradient}>
           <TextInput
             style={styles.input}
             {...field.inputProps}
             value={value}
             onChangeText={(text) => onChangeText(fieldName, text)}
           />
+          {field.icon ? field.icon : null}
         </AnimatedGradient>
-        <View style={{flexDirection:'row'}}><Text style={styles.error}>{error}</Text></View>
+
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.error}>{error}</Text>
+        </View>
       </Animated.View>
     );
   }
@@ -87,6 +89,8 @@ const styles = StyleSheet.create({
   inputGradient: {
     padding: 3,
     marginVertical: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
     height: 40,
@@ -107,5 +111,5 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
-  error: { textAlign: 'center', height: 17.5},
+  error: { textAlign: 'center', height: 17.5 },
 });

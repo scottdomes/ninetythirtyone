@@ -108,7 +108,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
             <ActivityIndicator size="large" color="#3F5EFB" />
           </View>
         )}
-        {fieldKeys.map((key) => {
+        {fieldKeys.map((key, i) => {
           return (
             <Field
               isSubmitting={isSubmitting}
