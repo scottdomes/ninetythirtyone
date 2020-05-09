@@ -82,6 +82,44 @@ export default class MainView extends React.Component {
     }
   }
 
+  createTodaysGoals() {
+    const lastDaysGoals = goalObject[dateKey];
+
+    const goals = {
+      ninety: lastDaysGoals.ninety.map((goal) => {
+        if (goal.complete) {
+          return {
+            name: '',
+            complete: false,
+          };
+        }
+        return goal;
+      }),
+      thirty: lastDaysGoals.thirty.map((goal) => {
+        if (goal.complete) {
+          return {
+            name: '',
+            complete: false,
+          };
+        }
+        return goal;
+      }),
+      one: lastDaysGoals.one.map((goal) => {
+        if (goal.complete) {
+          return {
+            name: '',
+            complete: false,
+          };
+        }
+        return goal;
+      }),
+    };
+    firebase
+      .database()
+      .ref(`/users/${this.userId}/${getTodaysDate()}`)
+      .set(goals);
+  }
+
   checkForTodaysData() {
     firebase
       .database()
@@ -91,7 +129,7 @@ export default class MainView extends React.Component {
         const goalObject = data.val();
 
         if (!goalObject) {
-          return this.setState({ loaded: true });
+          return this.createTodaysGoals();
         }
 
         const dateKey = Object.keys(goalObject)[0];
@@ -99,10 +137,7 @@ export default class MainView extends React.Component {
         if (dateKey === getTodaysDate()) {
           this.setState({ loaded: true, goals: goalObject[dateKey] });
         } else {
-          const activeGoals = goalObject[dateKey].filter(
-            (goal) => !goal.complete
-          );
-          this.setState({ loaded: true, goals: activeGoals });
+          this.createTodaysGoals();
         }
       });
   }
@@ -124,7 +159,7 @@ export default class MainView extends React.Component {
             name="One"
             component={OneDayView}
             options={{
-              tabBarLabel: "ONE",
+              tabBarLabel: 'ONE',
               tabBarIcon: ({ color, size }) => (
                 <Ionicons
                   name="ios-checkmark-circle"

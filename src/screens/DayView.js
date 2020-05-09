@@ -101,9 +101,9 @@ export default class DayView extends React.Component {
         if (dateKey === getTodaysDate()) {
           this.setState({ loaded: true, goals: goalObject[dateKey] });
         } else {
-          this.props.navigation.navigate('NinetyDayEntry', {
-            previousGoals: goalObject[dateKey],
-          });
+          // this.props.navigation.navigate('NinetyDayEntry', {
+          //   previousGoals: goalObject[dateKey],
+          // });
         }
       });
   }
