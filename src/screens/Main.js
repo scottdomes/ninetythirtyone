@@ -7,8 +7,10 @@ import { Notifications } from 'expo';
 import { scheduleMorningNotification } from '../utils/notify';
 import * as firebase from 'firebase';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DayView from './DayView';
 import OneDayView from './OneDayView';
+import ThirtyDayView from './ThirtyDayView';
+import NinetyDayView from './NinetyDayView';
+
 import GoalContext from '../components/GoalContext';
 
 const Tab = createBottomTabNavigator();
@@ -154,12 +156,31 @@ export default class MainView extends React.Component {
     return (
       <GoalContext.Provider value={this.state.goals}>
         <Tab.Navigator>
-          <Tab.Screen name="DayView" component={DayView} />
+          <Tab.Screen
+            name="Ninety"
+            component={NinetyDayView}
+            options={{
+              tabBarLabel: 'MACRO',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="ios-compass" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Thirty"
+            component={ThirtyDayView}
+            options={{
+              tabBarLabel: 'MEZZO',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="ios-rocket" size={size} color={color} />
+              ),
+            }}
+          />
           <Tab.Screen
             name="One"
             component={OneDayView}
             options={{
-              tabBarLabel: 'ONE',
+              tabBarLabel: 'MICRO',
               tabBarIcon: ({ color, size }) => (
                 <Ionicons
                   name="ios-checkmark-circle"
