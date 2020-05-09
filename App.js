@@ -1,10 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Form from './src/forms/Form'
+import { validateContent, validateLength } from './src/forms/validation';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Form       
+      action={() => {}}
+      afterSubmit={() => {}}
+      buttonText="Submit"
+      fields={{
+        phone: {
+          label: 'Phone Number',
+          validators: [validateContent, validateLength],
+          inputProps: {
+            keyboardType: 'phone-pad',
+          },
+        },
+      }}
+      />
     </View>
   );
 }
