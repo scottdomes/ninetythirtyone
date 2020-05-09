@@ -115,10 +115,22 @@ export default class DayView extends React.Component {
           );
         })}
         {this.state.goals.thirty.map((goal, i) => {
-          return <GoalDisplay key={`30${i}`} goal={goal} />;
+          return (
+            <GoalDisplay
+              key={`30${i}`}
+              goal={goal}
+              toggleCompletion={() => this.toggleCompletion('thirty', i, goal)}
+            />
+          );
         })}
         {this.state.goals.one.map((goal, i) => {
-          return <GoalDisplay key={`1${i}`} goal={goal} />;
+          return (
+            <GoalDisplay
+              key={`1${i}`}
+              goal={goal}
+              toggleCompletion={() => this.toggleCompletion('one', i, goal)}
+            />
+          );
         })}
         <TouchableWithoutFeedback
           onPressIn={() =>

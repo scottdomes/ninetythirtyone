@@ -1,3 +1,5 @@
 export const getTodaysDate = () => {
-  return new Date().toISOString().substr(0, 10);
+  const today = new Date();
+  today.setDate(today.getDate());
+  return today.toISOString().substr(0, 10);
 };

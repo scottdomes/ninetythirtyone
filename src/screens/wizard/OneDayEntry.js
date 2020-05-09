@@ -14,10 +14,11 @@ import * as firebase from 'firebase';
 const OneDayEntry = ({ navigation, route }) => {
   const { ninety, thirty, previousGoals } = route.params;
   const goalFields = {};
+
   previousGoals.one.forEach((goal, i) => {
     goalFields[i] = {
       label: '',
-      defaultValue: `${goal}`,
+      defaultValue: goal.complete ? '' : `${goal.name}`,
       validators: [validateContent],
     };
   });

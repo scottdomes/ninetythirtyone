@@ -6,9 +6,10 @@ import { validateContent } from './validation';
 const MultiGoalForm = ({ afterSubmit, previousGoals }) => {
   const goalFields = {};
   previousGoals.forEach((goal, i) => {
+    console.log(goal);
     goalFields[i] = {
       label: '',
-      defaultValue: `${goal}`,
+      defaultValue: goal.complete ? '' : `${goal.name}`,
       validators: [validateContent],
     };
   });
