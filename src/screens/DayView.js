@@ -27,18 +27,20 @@ export default class DayView extends React.Component {
   }
 
   checkForTodaysData(userId) {
-    const date = getTodaysDate();
-    console.log(userId, date);
     firebase
       .database()
-      .ref(`/users/${userId}/${date}`)
+      .ref(`/users/${userId}/`)
+      .limitToLast(1)
       .on('value', (data) => {
-        const goals = data.val();
+        const goalObject = data.val();
+        const dateKey = Object.keys(goalObject)[0];
 
-        if (goals) {
-          this.setState({ loaded: true, goals });
+        if (dateKey === getTodaysDate()) {
+          this.setState({ loaded: true, goals: goalObject[dateKey] });
         } else {
-          this.props.navigation.navigate('NinetyDayEntry');
+          this.props.navigation.navigate('NinetyDayEntry', {
+            previousGoals: goalObject[dateKey],
+          });
         }
       });
   }
@@ -63,7 +65,11 @@ export default class DayView extends React.Component {
         })}
         <Text>{this.state.goals.one}</Text>
         <TouchableWithoutFeedback
-          onPressIn={() => this.props.navigation.navigate('NinetyDayEntry')}>
+          onPressIn={() =>
+            this.props.navigation.navigate('NinetyDayEntry', {
+              previousGoals: this.state.goals,
+            })
+          }>
           <Text>Edit</Text>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPressIn={() => firebase.auth().signOut()}>

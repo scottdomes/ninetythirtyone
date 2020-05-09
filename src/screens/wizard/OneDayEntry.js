@@ -11,69 +11,42 @@ import { validateContent } from '../../forms/validation';
 import { getTodaysDate } from '../../utils/date';
 import * as firebase from 'firebase';
 
-export default class OneDayEntry extends React.Component {
-  state = { loaded: false, goal: '' };
-  componentDidMount() {
-    this.loadPreviousGoals();
-  }
+const OneDayEntry = ({ navigation, route }) => {
+  const { ninety, thirty, previousGoals } = route.params;
 
-  async loadPreviousGoals() {
-    const user = await firebase.auth().currentUser;
-    const data = await firebase
-      .database()
-      .ref(`/users/${user.uid}/`)
-      .limitToLast(1)
-      .once('value');
-    const goalObject = data.val();
-    const lastDateKey = Object.keys(goalObject)[0];
-    const goal = goalObject[lastDateKey].one;
-    this.setState({ loaded: true, goal });
-  }
+  return (
+    <View style={styles.container}>
+      <Form
+        action={async (goal) => {
+          const user = await firebase.auth().currentUser;
+          const userId = user.uid;
+          const finalGoals = {
+            ninety,
+            thirty,
+            one: goal,
+          };
+          return firebase
+            .database()
+            .ref(`/users/${userId}/${getTodaysDate()}`)
+            .set(finalGoals);
+        }}
+        afterSubmit={(goalObject) => {
+          navigation.navigate('DayView');
+        }}
+        buttonText="Commit"
+        fields={{
+          1: {
+            label: '',
+            defaultValue: `${previousGoals.one}`,
+            validators: [validateContent],
+          },
+        }}
+      />
+    </View>
+  );
+};
 
-  render() {
-    if (!this.state.loaded) {
-      return (
-        <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator size="large" color="#3F5EFB" />
-        </View>
-      );
-    }
-
-    const { navigation } = this.props;
-    const { ninety, thirty } = this.props.route.params;
-
-    return (
-      <View style={styles.container}>
-        <Form
-          action={async (goal) => {
-            const user = await firebase.auth().currentUser;
-            const userId = user.uid;
-            const finalGoals = {
-              ninety,
-              thirty,
-              one: goal,
-            };
-            return firebase
-              .database()
-              .ref(`/users/${userId}/${getTodaysDate()}`)
-              .set(finalGoals);
-          }}
-          afterSubmit={(goalObject) => {
-            navigation.navigate('DayView');
-          }}
-          buttonText="Commit"
-          fields={{
-            1: {
-              label: '',
-              defaultValue: `${this.state.goal}`,
-              validators: [validateContent],
-            },
-          }}
-        />
-      </View>
-    );
-  }
-}
+export default OneDayEntry;
 
 const styles = StyleSheet.create({
   container: {
