@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PhoneEntry">
+      <Stack.Navigator initialRouteName="DayView">
         <Stack.Screen name="PhoneEntry" component={PhoneEntry} />
         <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
         <Stack.Screen name="DayView" component={DayView} />
