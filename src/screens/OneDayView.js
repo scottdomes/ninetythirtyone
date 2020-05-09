@@ -51,7 +51,9 @@ class OneDayView extends React.Component {
     return (
       <View style={styles.container}>
         <Form
+          headerText="Tasks for today"
           disableSubmitUntilChange
+          disabledbuttonText="Committed!"
           action={async (goal1, goal2, goal3) => {
             const user = await firebase.auth().currentUser;
             const userId = user.uid;
@@ -77,6 +79,11 @@ class OneDayView extends React.Component {
 export default OneDayView;
 
 const styles = StyleSheet.create({
+  header: {
+    height: 20,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
   container: {
     flex: 1,
     alignItems: 'center',

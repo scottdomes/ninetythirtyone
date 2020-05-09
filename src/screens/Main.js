@@ -9,11 +9,14 @@ import * as firebase from 'firebase';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DayView from './DayView';
 import OneDayView from './OneDayView';
-import GoalContext from '../components/GoalContext'
+import GoalContext from '../components/GoalContext';
 
 const Tab = createBottomTabNavigator();
 
 export default class MainView extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
   state = {
     loaded: false,
     goals: [
@@ -117,7 +120,20 @@ export default class MainView extends React.Component {
       <GoalContext.Provider value={this.state.goals}>
         <Tab.Navigator>
           <Tab.Screen name="DayView" component={DayView} />
-          <Tab.Screen name="One" component={OneDayView} />
+          <Tab.Screen
+            name="One"
+            component={OneDayView}
+            options={{
+              tabBarLabel: "ONE",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons
+                  name="ios-checkmark-circle"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
         </Tab.Navigator>
       </GoalContext.Provider>
     );

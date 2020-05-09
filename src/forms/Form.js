@@ -45,6 +45,8 @@ const Form = ({
   action,
   afterSubmit,
   disableSubmitUntilChange,
+  disabledbuttonText,
+  headerText,
 }) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialValues(fields));
@@ -107,10 +109,11 @@ const Form = ({
     }
   };
 
+  const isButtonDisabled = disableSubmitUntilChange && !hasChanged;
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <View style={{ flex: 1, justifyContent: 'flex-end', width: 300 }}>
-        <Text style={styles.error}>{errorMessage}</Text>
+        <Text style={styles.error}>{errorMessage || headerText}</Text>
       </View>
       <Animated.View style={{ opacity }}>
         {isSubmitting && (
@@ -134,10 +137,14 @@ const Form = ({
       </Animated.View>
       <View style={{ flex: 1 }}>
         <SubmitButton
-          title={buttonText}
+          title={
+            disabledbuttonText && isButtonDisabled
+              ? disabledbuttonText
+              : buttonText
+          }
           onPress={submit}
           isSubmitting={isSubmitting}
-          disabled={disableSubmitUntilChange && !hasChanged}
+          disabled={isButtonDisabled}
         />
       </View>
     </KeyboardAvoidingView>

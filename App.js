@@ -11,18 +11,16 @@ import NinetyDayEntry from './src/screens/wizard/NinetyDayEntry';
 import ThirtyDayEntry from './src/screens/wizard/ThirtyDayEntry';
 import OneDayEntry from './src/screens/wizard/OneDayEntry';
 
-import Main from './src/screens/Main'
+import Main from './src/screens/Main';
 
 initialize();
 
 const Stack = createStackNavigator();
 
-
-
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator initialRouteName="Main" headerMode="none">
         <Stack.Screen name="PhoneEntry" component={PhoneEntry} />
         <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
         <Stack.Screen name="Main" component={Main} />
