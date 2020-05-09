@@ -11,7 +11,7 @@ import { validateContent } from '../../forms/validation';
 
 import * as firebase from 'firebase';
 
-export default class NinetyDayView extends React.Component {
+export default class ThirtyDayEntry extends React.Component {
   state = { loaded: false, goals: [] };
   componentDidMount() {
     this.loadPreviousGoals();
@@ -26,7 +26,7 @@ export default class NinetyDayView extends React.Component {
       .once('value');
     const goalObject = data.val();
     const lastDateKey = Object.keys(goalObject)[0];
-    const goals = goalObject[lastDateKey].ninety;
+    const goals = goalObject[lastDateKey].thirty;
     this.setState({ loaded: true, goals });
   }
 
@@ -38,6 +38,7 @@ export default class NinetyDayView extends React.Component {
         </View>
       );
     }
+
     const { navigation } = this.props;
     const goalFields = {};
     this.state.goals.forEach((goal, i) => {
@@ -47,6 +48,7 @@ export default class NinetyDayView extends React.Component {
         validators: [validateContent],
       };
     });
+    const { ninety } = this.props.route.params;
 
     return (
       <View style={styles.container}>
@@ -55,8 +57,9 @@ export default class NinetyDayView extends React.Component {
             Promise.resolve({ 0: goal1, 1: goal2, 2: goal3 })
           }
           afterSubmit={(goalObject) => {
-            navigation.navigate('ThirtyDayEntry', {
-              ninety: goalObject,
+            navigation.navigate('OneDayEntry', {
+              ninety,
+              thirty: goalObject,
             });
           }}
           buttonText="Commit"

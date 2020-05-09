@@ -7,7 +7,8 @@ import VerificationEntry from './src/screens/VerificationEntry';
 import DayView from './src/screens/DayView';
 
 import NinetyDayEntry from './src/screens/wizard/NinetyDayEntry';
-
+import ThirtyDayEntry from './src/screens/wizard/ThirtyDayEntry';
+import OneDayEntry from './src/screens/wizard/OneDayEntry';
 
 initialize();
 
@@ -21,6 +22,8 @@ function App() {
         <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
         <Stack.Screen name="DayView" component={DayView} />
         <Stack.Screen name="NinetyDayEntry" component={NinetyDayEntry} />
+        <Stack.Screen name="ThirtyDayEntry" component={ThirtyDayEntry} />
+        <Stack.Screen name="OneDayEntry" component={OneDayEntry} />
       </Stack.Navigator>
     </NavigationContainer>
   );

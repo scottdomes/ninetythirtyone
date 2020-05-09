@@ -11,8 +11,15 @@ import { validateContent } from '../../forms/validation';
 
 import * as firebase from 'firebase';
 
-export default class NinetyDayView extends React.Component {
-  state = { loaded: false, goals: [] };
+const todaysDate = () => {
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+  const date = new Date().getDate() + 1;
+  return `${year}-${month}-${date}`;
+};
+
+export default class OneDayEntry extends React.Component {
+  state = { loaded: false, goal: '' };
   componentDidMount() {
     this.loadPreviousGoals();
   }
@@ -26,8 +33,8 @@ export default class NinetyDayView extends React.Component {
       .once('value');
     const goalObject = data.val();
     const lastDateKey = Object.keys(goalObject)[0];
-    const goals = goalObject[lastDateKey].ninety;
-    this.setState({ loaded: true, goals });
+    const goal = goalObject[lastDateKey].one;
+    this.setState({ loaded: true, goal });
   }
 
   render() {
@@ -38,29 +45,37 @@ export default class NinetyDayView extends React.Component {
         </View>
       );
     }
+
     const { navigation } = this.props;
-    const goalFields = {};
-    this.state.goals.forEach((goal, i) => {
-      goalFields[i] = {
-        label: '',
-        defaultValue: `${goal}`,
-        validators: [validateContent],
-      };
-    });
+    const { ninety, thirty } = this.props.route.params;
 
     return (
       <View style={styles.container}>
         <Form
-          action={(goal1, goal2, goal3) =>
-            Promise.resolve({ 0: goal1, 1: goal2, 2: goal3 })
-          }
+          action={async (goal) => {
+            const user = await firebase.auth().currentUser;
+            const userId = user.uid;
+            const finalGoals = {
+              ninety,
+              thirty,
+              one: goal,
+            };
+            return firebase
+              .database()
+              .ref(`/users/${userId}/${todaysDate()}`)
+              .set(finalGoals);
+          }}
           afterSubmit={(goalObject) => {
-            navigation.navigate('ThirtyDayEntry', {
-              ninety: goalObject,
-            });
+            navigation.navigate('DayView');
           }}
           buttonText="Commit"
-          fields={goalFields}
+          fields={{
+            1: {
+              label: '',
+              defaultValue: `${this.state.goal}`,
+              validators: [validateContent],
+            },
+          }}
         />
       </View>
     );
