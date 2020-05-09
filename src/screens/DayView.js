@@ -63,7 +63,9 @@ export default class DayView extends React.Component {
         {this.state.goals.thirty.map((goal) => {
           return <Text key={goal}>{goal}</Text>;
         })}
-        <Text>{this.state.goals.one}</Text>
+        {this.state.goals.one.map((goal) => {
+          return <Text key={goal}>{goal}</Text>;
+        })}
         <TouchableWithoutFeedback
           onPressIn={() =>
             this.props.navigation.navigate('NinetyDayEntry', {

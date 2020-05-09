@@ -13,17 +13,25 @@ import * as firebase from 'firebase';
 
 const OneDayEntry = ({ navigation, route }) => {
   const { ninety, thirty, previousGoals } = route.params;
+  const goalFields = {};
+  previousGoals.one.forEach((goal, i) => {
+    goalFields[i] = {
+      label: '',
+      defaultValue: `${goal}`,
+      validators: [validateContent],
+    };
+  });
 
   return (
     <View style={styles.container}>
       <Form
-        action={async (goal) => {
+        action={async (goal1, goal2, goal3) => {
           const user = await firebase.auth().currentUser;
           const userId = user.uid;
           const finalGoals = {
             ninety,
             thirty,
-            one: goal,
+            one: { 0: goal1, 1: goal2, 2: goal3 },
           };
           return firebase
             .database()
@@ -34,13 +42,7 @@ const OneDayEntry = ({ navigation, route }) => {
           navigation.navigate('DayView');
         }}
         buttonText="Commit"
-        fields={{
-          1: {
-            label: '',
-            defaultValue: `${previousGoals.one}`,
-            validators: [validateContent],
-          },
-        }}
+        fields={goalFields}
       />
     </View>
   );
