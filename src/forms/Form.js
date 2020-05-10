@@ -101,10 +101,10 @@ const Form = ({
         action(...getValues()),
         animationTimeout(),
       ]);
-      await afterSubmit(result);
-      fadeIn();
       setSubmitting(false);
       setHasChanged(false);
+      await afterSubmit(result);
+      fadeIn();
     } catch (e) {
       setErrorMessage(e.message);
       setSubmitting(false);

@@ -18,7 +18,7 @@ import OneDayView from './OneDayView';
 import ThirtyDayView from './ThirtyDayView';
 import NinetyDayView from './NinetyDayView';
 import KeyboardListener from '../components/KeyboardListener';
-import GoalContext from '../components/GoalContext';
+import GoalManager from '../components/GoalManager';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,22 +26,9 @@ export default class MainView extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
   state = {
-    loaded: false,
-    goals: [
-      {
-        name: '',
-        complete: false,
-      },
-      {
-        name: '',
-        complete: false,
-      },
-      {
-        name: '',
-        complete: false,
-      },
-    ],
+    userId: null,
   };
 
   componentDidMount() {
@@ -71,10 +58,9 @@ export default class MainView extends React.Component {
   };
 
   checkForUser() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.userId = user.uid;
-        this.checkForTodaysData();
+    this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (user && this.state.userId !== user.uid) {
+        this.setState({ userId: user.uid });
       } else {
         this.props.navigation.navigate('Login');
       }
@@ -82,134 +68,14 @@ export default class MainView extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.userId) {
-      firebase
-        .database()
-        .ref(`/users/${this.userId}/`)
-        .limitToLast(1)
-        .off('value');
+    if (this.authUnsubscribe) {
+      this.authUnsubscribe();
     }
-  }
-
-  createAllNewGoals() {
-    firebase
-      .database()
-      .ref(`/users/${this.userId}/${getTodaysDate()}`)
-      .set({
-        ninety: [
-          {
-            name: '',
-            complete: false,
-          },
-          {
-            name: '',
-            complete: false,
-          },
-          {
-            name: '',
-            complete: false,
-          },
-        ],
-        thirty: [
-          {
-            name: '',
-            complete: false,
-          },
-          {
-            name: '',
-            complete: false,
-          },
-          {
-            name: '',
-            complete: false,
-          },
-        ],
-        one: [
-          {
-            name: '',
-            complete: false,
-          },
-          {
-            name: '',
-            complete: false,
-          },
-          {
-            name: '',
-            complete: false,
-          },
-        ],
-      });
-  }
-
-  createTodaysGoals(lastDaysGoals) {
-    const goals = {
-      ninety: lastDaysGoals.ninety.map((goal) => {
-        if (goal.complete) {
-          return {
-            name: '',
-            complete: false,
-          };
-        }
-        return goal;
-      }),
-      thirty: lastDaysGoals.thirty.map((goal) => {
-        if (goal.complete) {
-          return {
-            name: '',
-            complete: false,
-          };
-        }
-        return goal;
-      }),
-      one: lastDaysGoals.one.map((goal) => {
-        if (goal.complete) {
-          return {
-            name: '',
-            complete: false,
-          };
-        }
-        return goal;
-      }),
-    };
-    firebase
-      .database()
-      .ref(`/users/${this.userId}/${getTodaysDate()}`)
-      .set(goals);
-  }
-
-  checkForTodaysData() {
-    firebase
-      .database()
-      .ref(`/users/${this.userId}/`)
-      .limitToLast(1)
-      .on('value', (data) => {
-        const goalObject = data.val();
-
-        if (!goalObject) {
-          return this.createAllNewGoals();
-        }
-
-        const dateKey = Object.keys(goalObject)[0];
-
-        if (dateKey === getTodaysDate()) {
-          this.setState({ loaded: true, goals: goalObject[dateKey] });
-        } else {
-          this.createTodaysGoals(goalObject[dateKey]);
-        }
-      });
   }
 
   render() {
-    if (!this.state.loaded) {
-      return (
-        <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator size="large" color="#3F5EFB" />
-        </View>
-      );
-    }
-
     return (
-      <GoalContext.Provider value={this.state.goals}>
+      <GoalManager userId={this.state.userId}>
         <View style={styles.settings}>
           <KeyboardListener>
             {(keyboardShown) => {
@@ -263,7 +129,7 @@ export default class MainView extends React.Component {
             }}
           />
         </Tab.Navigator>
-      </GoalContext.Provider>
+      </GoalManager>
     );
   }
 }
@@ -284,16 +150,5 @@ const styles = StyleSheet.create({
     top: '6%',
     zIndex: 5,
     right: '5%',
-  },
-  activityIndicatorContainer: {
-    position: 'absolute',
-    flex: 1,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2,
   },
 });
