@@ -76,7 +76,7 @@ export default class MainView extends React.Component {
         this.userId = user.uid;
         this.checkForTodaysData();
       } else {
-        this.props.navigation.navigate('PhoneEntry');
+        this.props.navigation.navigate('Login');
       }
     });
   }
@@ -89,6 +89,56 @@ export default class MainView extends React.Component {
         .limitToLast(1)
         .off('value');
     }
+  }
+
+  createAllNewGoals() {
+    firebase
+      .database()
+      .ref(`/users/${this.userId}/${getTodaysDate()}`)
+      .set({
+        ninety: [
+          {
+            name: '',
+            complete: false,
+          },
+          {
+            name: '',
+            complete: false,
+          },
+          {
+            name: '',
+            complete: false,
+          },
+        ],
+        thirty: [
+          {
+            name: '',
+            complete: false,
+          },
+          {
+            name: '',
+            complete: false,
+          },
+          {
+            name: '',
+            complete: false,
+          },
+        ],
+        one: [
+          {
+            name: '',
+            complete: false,
+          },
+          {
+            name: '',
+            complete: false,
+          },
+          {
+            name: '',
+            complete: false,
+          },
+        ],
+      });
   }
 
   createTodaysGoals(lastDaysGoals) {
@@ -136,7 +186,7 @@ export default class MainView extends React.Component {
         const goalObject = data.val();
 
         if (!goalObject) {
-          return this.createTodaysGoals();
+          return this.createAllNewGoals();
         }
 
         const dateKey = Object.keys(goalObject)[0];

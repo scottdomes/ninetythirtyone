@@ -8,6 +8,10 @@ import VerificationEntry from './src/screens/VerificationEntry';
 
 import Main from './src/screens/Main';
 import Settings from './src/screens/Settings';
+import Login from './src/screens/Login';
+import EmailEntry from './src/screens/EmailEntry';
+import EmailSignUp from './src/screens/EmailSignUp';
+import ForgotPassword from './src/screens/ForgotPassword';
 
 initialize();
 
@@ -27,6 +31,10 @@ function App() {
           }}
         />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="EmailEntry" component={EmailEntry} />
+        <Stack.Screen name="EmailSignUp" component={EmailSignUp} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
