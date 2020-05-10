@@ -95,7 +95,6 @@ export default class Field extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
   inputGradient: {
     padding: 3,
     marginVertical: 3,

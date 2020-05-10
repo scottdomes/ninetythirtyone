@@ -13,6 +13,8 @@ import {
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
 import SubmitButton from './SubmitButton';
+import FormHeader from './FormHeader';
+import SubmittingIndicator from './SubmittingIndicator';
 
 const getInitialValues = (fields) => {
   const fieldKeys = Object.keys(fields);
@@ -115,15 +117,9 @@ const Form = ({
   const isButtonDisabled = disableSubmitUntilChange && !hasChanged;
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-      <View style={{ flex: 1, justifyContent: 'flex-end', width: 300 }}>
-        <Text style={styles.error}>{errorMessage || headerText}</Text>
-      </View>
+      <FormHeader errorMessage={errorMessage} headerText={headerText} />
       <Animated.View style={{ opacity }}>
-        {isSubmitting && (
-          <View style={styles.activityIndicatorContainer}>
-            <ActivityIndicator size="large" color="#3F5EFB" />
-          </View>
-        )}
+        <SubmittingIndicator isSubmitting={isSubmitting} />
         {fieldKeys.map((key, i) => {
           return (
             <Field
@@ -167,20 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: 15,
-  },
-  activityIndicatorContainer: {
-    position: 'absolute',
-    flex: 1,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2,
-  },
-  error: {
-    marginBottom: 20,
   },
 });
 

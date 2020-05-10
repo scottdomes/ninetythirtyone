@@ -124,6 +124,7 @@ export default class GoalManager extends React.Component {
       .ref(`/users/${this.props.userId}/`)
       .limitToLast(1)
       .on('value', (data) => {
+        this.setState({ loaded: false });
         const goalObject = data.val();
 
         if (!goalObject) {
