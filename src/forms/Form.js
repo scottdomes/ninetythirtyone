@@ -8,7 +8,7 @@ import {
   Animated,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
@@ -48,6 +48,7 @@ const Form = ({
   disableSubmitUntilChange,
   disabledbuttonText,
   headerText,
+  children,
 }) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialValues(fields));
@@ -83,7 +84,7 @@ const Form = ({
   const submit = async () => {
     setSubmitting(true);
     setErrorMessage('');
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     setValidationErrors(getInitialState(fieldKeys));
 
     const errors = validateFields(fields, values);
@@ -148,6 +149,7 @@ const Form = ({
           isSubmitting={isSubmitting}
           disabled={isButtonDisabled}
         />
+        <View style={styles.childrenContainer}>{children}</View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -160,6 +162,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 15,
     position: 'relative',
+  },
+  childrenContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: 15,
   },
   activityIndicatorContainer: {
     position: 'absolute',

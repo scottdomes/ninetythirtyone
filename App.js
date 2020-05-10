@@ -21,8 +21,20 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main" headerMode="screen">
-        <Stack.Screen name="PhoneEntry" component={PhoneEntry} />
-        <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
+        <Stack.Screen
+          name="PhoneEntry"
+          component={PhoneEntry}
+          options={{
+            headerTitle: 'Phone sign in',
+          }}
+        />
+        <Stack.Screen
+          name="VerificationEntry"
+          component={VerificationEntry}
+          options={{
+            headerTitle: 'Code entry',
+          }}
+        />
         <Stack.Screen
           name="Main"
           component={Main}
@@ -31,10 +43,34 @@ function App() {
           }}
         />
         <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="EmailEntry" component={EmailEntry} />
-        <Stack.Screen name="EmailSignUp" component={EmailSignUp} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EmailEntry"
+          component={EmailEntry}
+          options={{
+            headerTitle: 'Email sign in',
+          }}
+        />
+        <Stack.Screen
+          name="EmailSignUp"
+          component={EmailSignUp}
+          options={{
+            headerTitle: 'Email sign up',
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
+          options={{
+            headerTitle: 'Forgot password',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

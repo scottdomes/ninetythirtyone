@@ -6,21 +6,27 @@ import SubmitButton from '../forms/SubmitButton';
 export default function Login({ navigation }) {
   return (
     <View style={styles.container}>
-      <SubmitButton
-        title="Log in with your phone"
-        onPress={() => navigation.navigate('PhoneEntry')}
-        isSubmitting={false}
-      />
-      <SubmitButton
-        title="Log in with email"
-        onPress={() => navigation.navigate('EmailEntry')}
-        isSubmitting={false}
-      />
-      <SubmitButton
-        title="Sign up with email"
-        onPress={() => navigation.navigate('EmailSignUp')}
-        isSubmitting={false}
-      />
+      <View style={styles.buttonContainer}>
+        <SubmitButton
+          title="Log in with your phone"
+          onPress={() => navigation.navigate('PhoneEntry')}
+          isSubmitting={false}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <SubmitButton
+          title="Log in with email"
+          onPress={() => navigation.navigate('EmailEntry')}
+          isSubmitting={false}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <SubmitButton
+          title="Sign up with email"
+          onPress={() => navigation.navigate('EmailSignUp')}
+          isSubmitting={false}
+        />
+      </View>
     </View>
   );
 }
@@ -31,5 +37,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonContainer: {
+    marginBottom: 30,
   },
 });

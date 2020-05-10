@@ -6,7 +6,6 @@ import * as firebase from 'firebase';
 
 const EmailEntry = ({ navigation }) => {
   return (
-    <View>
       <Form
         action={(email, password) =>
           firebase.auth().signInWithEmailAndPassword(email, password)
@@ -28,14 +27,21 @@ const EmailEntry = ({ navigation }) => {
               secureTextEntry: true,
             },
           },
-        }}
-      />
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('ForgotPassword')}>
-        <Text>Forgot password?</Text>
-      </TouchableWithoutFeedback>
-    </View>
+        }}>
+        <View style={styles.linkContainer}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text>Forgot password?</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      </Form>
   );
 };
 
 export default EmailEntry;
+
+const styles = StyleSheet.create({
+  linkContainer: {
+    marginBottom: 60,
+  },
+});
