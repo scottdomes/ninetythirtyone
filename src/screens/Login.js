@@ -2,10 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 import SubmitButton from '../forms/SubmitButton';
+import WhiteBackgroundLogo from '../logos/WhiteBackgroundLogo';
 
 export default function Login({ navigation }) {
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.logo}>
+          <WhiteBackgroundLogo />
+        </View>
+      </View>
       <View style={styles.buttonContainer}>
         <SubmitButton
           title="Log in with your phone"
@@ -40,5 +46,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginBottom: 30,
+  },
+
+
+  logo: {
+    marginBottom: 10,
   },
 });
