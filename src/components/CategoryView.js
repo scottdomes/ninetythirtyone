@@ -64,7 +64,7 @@ class CategoryView extends React.Component {
             renderHeader={() => (
               <View style={styles.header}>
                 <View style={styles.logo}>
-                  <WhiteBackgroundLogo />
+                  <WhiteBackgroundLogo category={this.props.category} />
                 </View>
               </View>
             )}
