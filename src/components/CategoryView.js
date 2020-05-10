@@ -12,6 +12,7 @@ import Form from '../forms/Form';
 import { validateContent } from '../forms/validation';
 import * as firebase from 'firebase';
 import { getTodaysDate } from '../utils/date';
+import { Ionicons } from '@expo/vector-icons';
 
 class CategoryView extends React.Component {
   static contextType = GoalContext;
@@ -25,7 +26,9 @@ class CategoryView extends React.Component {
 
     firebase
       .database()
-      .ref(`/users/${user.uid}/${getTodaysDate()}/${this.props.category}/${index}`)
+      .ref(
+        `/users/${user.uid}/${getTodaysDate()}/${this.props.category}/${index}`
+      )
       .set({
         ...goal,
         complete: !goal.complete,
@@ -43,7 +46,9 @@ class CategoryView extends React.Component {
         icon: (
           <GoalCheckmark
             isComplete={goal.complete}
-            toggleCompletion={() => this.toggleCompletion(this.props.category, i, goal)}
+            toggleCompletion={() =>
+              this.toggleCompletion(this.props.category, i, goal)
+            }
           />
         ),
       };
@@ -84,6 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
+
   container: {
     flex: 1,
     alignItems: 'center',

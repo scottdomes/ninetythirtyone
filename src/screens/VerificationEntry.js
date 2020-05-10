@@ -5,7 +5,6 @@ import { validateContent } from '../forms/validation';
 import * as firebase from 'firebase';
 
 export default function VerificationEntry({ route, navigation }) {
-  console.log(route);
   const { verificationId } = route.params;
   return (
     <View style={styles.container}>
@@ -17,7 +16,7 @@ export default function VerificationEntry({ route, navigation }) {
           );
           return firebase.auth().signInWithCredential(credential);
         }}
-        afterSubmit={() => navigation.navigate('DayView')}
+        afterSubmit={() => navigation.navigate('Main')}
         buttonText="Submit"
         fields={{
           verificationCode: {

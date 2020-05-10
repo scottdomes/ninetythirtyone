@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { getTodaysDate } from '../utils/date';
 import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
@@ -84,9 +90,7 @@ export default class MainView extends React.Component {
     }
   }
 
-  createTodaysGoals() {
-    const lastDaysGoals = goalObject[dateKey];
-
+  createTodaysGoals(lastDaysGoals) {
     const goals = {
       ninety: lastDaysGoals.ninety.map((goal) => {
         if (goal.complete) {
@@ -139,7 +143,7 @@ export default class MainView extends React.Component {
         if (dateKey === getTodaysDate()) {
           this.setState({ loaded: true, goals: goalObject[dateKey] });
         } else {
-          this.createTodaysGoals();
+          this.createTodaysGoals(goalObject[dateKey]);
         }
       });
   }
@@ -155,6 +159,12 @@ export default class MainView extends React.Component {
 
     return (
       <GoalContext.Provider value={this.state.goals}>
+        <View style={styles.settings}>
+          <TouchableWithoutFeedback
+            onPressIn={() => this.props.navigation.navigate('Settings')}>
+            <Ionicons name="ios-settings" size={32} color="black" />
+          </TouchableWithoutFeedback>
+        </View>
         <Tab.Navigator>
           <Tab.Screen
             name="Ninety"
@@ -206,6 +216,12 @@ const styles = StyleSheet.create({
   },
   goal: {
     marginBottom: 20,
+  },
+  settings: {
+    position: 'absolute',
+    top: 50,
+    zIndex: 5,
+    right: 30,
   },
   activityIndicatorContainer: {
     position: 'absolute',
