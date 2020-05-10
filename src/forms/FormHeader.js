@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const FormHeader = ({ errorMessage, headerText }) => {
   return (
-    <View style={{  }}>
+    <View style={{ flex: 1, justifyContent: 'flex-end', width: 350, alignItems: 'center', height: 20 }}>
       <Text style={styles.error}>{errorMessage || headerText}</Text>
     </View>
   );

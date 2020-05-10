@@ -5,6 +5,7 @@ import {
   View,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import GoalContext from '../components/GoalContext';
 import GoalCheckmark from '../components/GoalCheckmark';
@@ -44,7 +45,6 @@ class CategoryView extends React.Component {
       goalFields[i] = {
         label: '',
         defaultValue: goal.name,
-        validators: [validateContent],
         complete: goal.complete,
         icon: (
           <GoalCheckmark
@@ -58,12 +58,16 @@ class CategoryView extends React.Component {
     });
 
     return (
-      <View style={styles.container}>
-        <View style={styles.logo}>
-          <WhiteBackgroundLogo />
-        </View>
+      <View style={styles.container} behavior="padding" enabled>
         <View styles={styles.formContainer}>
           <Form
+            renderHeader={() => (
+              <View style={styles.header}>
+                <View style={styles.logo}>
+                  <WhiteBackgroundLogo />
+                </View>
+              </View>
+            )}
             headerText={this.props.headerText}
             disableSubmitUntilChange
             disabledbuttonText="Committed!"
@@ -95,18 +99,20 @@ class CategoryView extends React.Component {
 export default CategoryView;
 
 const styles = StyleSheet.create({
-  logo: {
-    flex: 1,
-  },
-
-  formContainer: {
-    flex: 1
-  },
-
   container: {
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
+  },
+  formContainer: { flex: 2 },
+  header: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+
+  logo: {
+    marginBottom: 10,
   },
 });

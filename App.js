@@ -20,7 +20,9 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main" headerMode="screen">
+      <Stack.Navigator
+        initialRouteName="Main"
+        headerMode="screen">
         <Stack.Screen
           name="PhoneEntry"
           component={PhoneEntry}

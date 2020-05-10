@@ -1,4 +1,4 @@
-export const GRADIENT_COLORS = ['#FC466B', '#3F5EFB'];
+export const GRADIENT_COLORS = ['#FC466B', '#A075E6'];
 export const GRADIENT_ORIENTATIONS = [
   {
     start: { x: 0, y: 0 },

@@ -51,6 +51,7 @@ const Form = ({
   disabledbuttonText,
   headerText,
   children,
+  renderHeader,
 }) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialValues(fields));
@@ -103,10 +104,10 @@ const Form = ({
         action(...getValues()),
         animationTimeout(),
       ]);
-      setSubmitting(false);
-      setHasChanged(false);
       await afterSubmit(result);
       fadeIn();
+      setSubmitting(false);
+      setHasChanged(false);
     } catch (e) {
       setErrorMessage(e.message);
       setSubmitting(false);
@@ -117,7 +118,10 @@ const Form = ({
   const isButtonDisabled = disableSubmitUntilChange && !hasChanged;
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-      <FormHeader errorMessage={errorMessage} headerText={headerText} />
+      {renderHeader ? renderHeader() : null}
+      <View style={{ height: 50 }}>
+        <FormHeader errorMessage={errorMessage} headerText={headerText} />
+      </View>
       <Animated.View style={{ opacity }}>
         <SubmittingIndicator isSubmitting={isSubmitting} />
         {fieldKeys.map((key, i) => {

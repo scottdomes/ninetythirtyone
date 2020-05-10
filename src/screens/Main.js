@@ -93,7 +93,7 @@ export default class MainView extends React.Component {
             }}
           </KeyboardListener>
         </View>
-        <Tab.Navigator>
+        <Tab.Navigator cardStyle={{ backgroundColor: 'white' }} activeBackgroundColor="white">
           <Tab.Screen
             name="Ninety"
             component={NinetyDayView}
