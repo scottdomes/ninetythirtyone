@@ -76,7 +76,7 @@ export default class MainView extends React.Component {
         this.userId = user.uid;
         this.checkForTodaysData();
       } else {
-        this.props.navigation.navigate('PhoneEntry');
+        this.props.navigation.navigate('Login');
       }
     });
   }

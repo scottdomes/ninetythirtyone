@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { initialize } from './src/utils/firebase';
 import PhoneEntry from './src/screens/PhoneEntry';
 import VerificationEntry from './src/screens/VerificationEntry';
+import Login from './src/screens/Login';
 
 import Main from './src/screens/Main';
 import Settings from './src/screens/Settings';
@@ -18,6 +19,13 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main" headerMode="screen">
         <Stack.Screen name="PhoneEntry" component={PhoneEntry} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
         <Stack.Screen
           name="Main"
