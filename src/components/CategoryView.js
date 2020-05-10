@@ -41,7 +41,6 @@ class CategoryView extends React.Component {
     const goalFields = {};
 
     this.context[this.props.category].forEach((goal, i) => {
-      console.log(goal);
       goalFields[i] = {
         label: '',
         defaultValue: goal.name,
