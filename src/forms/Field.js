@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Animated } from 'react-native';
+import {
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  Animated,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { GRADIENT_COLORS, GRADIENT_ORIENTATIONS } from './constants';
 import AnimatedGradient from './AnimatedGradient';
 
@@ -62,33 +69,33 @@ export default class Field extends React.Component {
           ],
           opacity: field.complete ? 0.5 : 1,
         }}>
-        <Text>{field.label}</Text>
-        <AnimatedGradient
-          orientation={
-            isSubmitting || field.complete
-              ? GRADIENT_ORIENTATIONS[1]
-              : GRADIENT_ORIENTATIONS[0]
-          }
-          colors={GRADIENT_COLORS}
-          style={styles.inputGradient}>
-          <TextInput
-            style={styles.input}
-            {...field.inputProps}
-            value={value}
-            onChangeText={(text) => onChangeText(fieldName, text)}
-          />
-          {field.icon ? field.icon : null}
-        </AnimatedGradient>
-
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.error}>{error}</Text>
-        </View>
+          <Text>{field.label}</Text>
+          <AnimatedGradient
+            orientation={
+              isSubmitting || field.complete
+                ? GRADIENT_ORIENTATIONS[1]
+                : GRADIENT_ORIENTATIONS[0]
+            }
+            colors={GRADIENT_COLORS}
+            style={styles.inputGradient}>
+            <TextInput
+              style={styles.input}
+              {...field.inputProps}
+              value={value}
+              onChangeText={(text) => onChangeText(fieldName, text)}
+            />
+            {field.icon ? field.icon : null}
+          </AnimatedGradient>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.error}>{error}</Text>
+          </View>
       </Animated.View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+
   inputGradient: {
     padding: 3,
     marginVertical: 3,
@@ -102,14 +109,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   inputContainer: {
-    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    marginBottom: 30,
-
+    marginBottom: 10,
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,

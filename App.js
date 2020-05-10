@@ -16,10 +16,16 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main" headerMode="none">
+      <Stack.Navigator initialRouteName="Main" headerMode="screen">
         <Stack.Screen name="PhoneEntry" component={PhoneEntry} />
         <Stack.Screen name="VerificationEntry" component={VerificationEntry} />
-        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>

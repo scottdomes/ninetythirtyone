@@ -8,6 +8,7 @@ import {
   Animated,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Keyboard
 } from 'react-native';
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
@@ -82,6 +83,7 @@ const Form = ({
   const submit = async () => {
     setSubmitting(true);
     setErrorMessage('');
+    Keyboard.dismiss()
     setValidationErrors(getInitialState(fieldKeys));
 
     const errors = validateFields(fields, values);

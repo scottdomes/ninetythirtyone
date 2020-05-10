@@ -5,6 +5,7 @@ import {
   View,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { getTodaysDate } from '../utils/date';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +17,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import OneDayView from './OneDayView';
 import ThirtyDayView from './ThirtyDayView';
 import NinetyDayView from './NinetyDayView';
-
+import KeyboardListener from '../components/KeyboardListener';
 import GoalContext from '../components/GoalContext';
 
 const Tab = createBottomTabNavigator();
@@ -160,10 +161,21 @@ export default class MainView extends React.Component {
     return (
       <GoalContext.Provider value={this.state.goals}>
         <View style={styles.settings}>
-          <TouchableWithoutFeedback
-            onPressIn={() => this.props.navigation.navigate('Settings')}>
-            <Ionicons name="ios-settings" size={32} color="black" />
-          </TouchableWithoutFeedback>
+          <KeyboardListener>
+            {(keyboardShown) => {
+              return (
+                <TouchableWithoutFeedback
+                  onPressIn={() => this.props.navigation.navigate('Settings')}>
+                  <Ionicons
+                    name="ios-settings"
+                    size={25}
+                    color="#5c7080"
+                    style={keyboardShown ? { opacity: 0 } : {}}
+                  />
+                </TouchableWithoutFeedback>
+              );
+            }}
+          </KeyboardListener>
         </View>
         <Tab.Navigator>
           <Tab.Screen
@@ -219,9 +231,9 @@ const styles = StyleSheet.create({
   },
   settings: {
     position: 'absolute',
-    top: 50,
+    top: '6%',
     zIndex: 5,
-    right: 30,
+    right: '5%',
   },
   activityIndicatorContainer: {
     position: 'absolute',
