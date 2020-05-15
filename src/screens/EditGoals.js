@@ -1,9 +1,9 @@
 import React from 'react';
-import CategoryView from '../components/CategoryView';
+import EditCategoryView from '../components/EditCategoryView';
 
 const NinetyDayView = ({ navigation }) => {
   return (
-    <CategoryView
+    <EditCategoryView
       navigation={navigation}
       category="ninety"
       headerText="Goals for the next 90 days"

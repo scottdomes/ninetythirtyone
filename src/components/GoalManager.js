@@ -56,12 +56,12 @@ export default class GoalManager extends React.Component {
   };
 
   componentDidMount() {
-    this.checkForTodaysData();
+    this.listenForGoals();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      this.checkForTodaysData();
+      this.listenForGoals();
     }
   }
 
@@ -70,73 +70,16 @@ export default class GoalManager extends React.Component {
       firebase
         .database()
         .ref(`/users/${this.props.userId}/`)
-        .limitToLast(1)
         .off('value');
     }
   }
 
-  createAllNewGoals() {
-    firebase
-      .database()
-      .ref(`/users/${this.props.userId}/${getTodaysDate()}`)
-      .set({ ...defaultGoals });
-  }
-
-  createTodaysGoals(lastDaysGoals) {
-    const goals = {
-      ninety: lastDaysGoals.ninety.map((goal) => {
-        if (goal.complete) {
-          return {
-            name: '',
-            complete: false,
-          };
-        }
-        return goal;
-      }),
-      thirty: lastDaysGoals.thirty.map((goal) => {
-        if (goal.complete) {
-          return {
-            name: '',
-            complete: false,
-          };
-        }
-        return goal;
-      }),
-      one: lastDaysGoals.one.map((goal) => {
-        if (goal.complete) {
-          return {
-            name: '',
-            complete: false,
-          };
-        }
-        return goal;
-      }),
-    };
-    firebase
-      .database()
-      .ref(`/users/${this.props.userId}/${getTodaysDate()}`)
-      .set(goals);
-  }
-
-  checkForTodaysData() {
+  listenForGoals() {
     firebase
       .database()
       .ref(`/users/${this.props.userId}/`)
-      .limitToLast(1)
       .on('value', (data) => {
-        const goalObject = data.val();
-
-        if (!goalObject) {
-          return this.createAllNewGoals();
-        }
-
-        const dateKey = Object.keys(goalObject)[0];
-
-        if (dateKey === getTodaysDate()) {
-          this.setState({ loaded: true, goals: goalObject[dateKey] });
-        } else {
-          this.createTodaysGoals(goalObject[dateKey]);
-        }
+        this.setState({ loaded: true, goals: data.val() });
       });
   }
 

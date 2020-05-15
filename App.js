@@ -12,6 +12,7 @@ import Login from './src/screens/Login';
 import EmailEntry from './src/screens/EmailEntry';
 import EmailSignUp from './src/screens/EmailSignUp';
 import ForgotPassword from './src/screens/ForgotPassword';
+import EditGoals from './src/screens/EditGoals';
 
 initialize();
 
@@ -20,9 +21,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Main"
-        headerMode="screen">
+      <Stack.Navigator initialRouteName="Main" headerMode="screen">
         <Stack.Screen
           name="PhoneEntry"
           component={PhoneEntry}
@@ -40,6 +39,13 @@ function App() {
         <Stack.Screen
           name="Main"
           component={Main}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditGoals"
+          component={EditGoals}
           options={{
             headerShown: false,
           }}

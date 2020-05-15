@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import GoalContext from '../components/GoalContext';
+import { Link, StackActions } from '@react-navigation/native';
 import GoalCheckmark from '../components/GoalCheckmark';
 import Form from '../forms/Form';
 import { validateContent } from '../forms/validation';
@@ -15,6 +16,7 @@ import * as firebase from 'firebase';
 import { getTodaysDate } from '../utils/date';
 import { Ionicons } from '@expo/vector-icons';
 import WhiteBackgroundLogo from '../logos/WhiteBackgroundLogo';
+import Button from './Button';
 
 class CategoryView extends React.Component {
   static contextType = GoalContext;
@@ -38,58 +40,26 @@ class CategoryView extends React.Component {
   }
 
   render() {
-    const goalFields = {};
+    const goals = this.context || [];
 
-    this.context[this.props.category].forEach((goal, i) => {
-      goalFields[i] = {
-        label: '',
-        defaultValue: goal.name,
-        complete: goal.complete,
-        icon: (
-          <GoalCheckmark
-            isComplete={goal.complete}
-            toggleCompletion={() =>
-              this.toggleCompletion(this.props.category, i, goal)
-            }
-          />
-        ),
-      };
-    });
-
+    console.log(goals);
     return (
       <View style={styles.container} behavior="padding" enabled>
-        <View styles={styles.formContainer}>
-          <Form
-            renderHeader={() => (
-              <View style={styles.header}>
-                <View style={styles.logo}>
-                  <WhiteBackgroundLogo category={this.props.category} />
-                </View>
-              </View>
-            )}
-            headerText={this.props.headerText}
-            disableSubmitUntilChange
-            disabledbuttonText="Committed!"
-            action={async (goal1, goal2, goal3) => {
-              const user = await firebase.auth().currentUser;
-              const userId = user.uid;
-              const finalGoals = {
-                0: { name: goal1, complete: goalFields[0].complete },
-                1: { name: goal2, complete: goalFields[1].complete },
-                2: { name: goal3, complete: goalFields[2].complete },
-              };
-              return firebase
-                .database()
-                .ref(
-                  `/users/${userId}/${getTodaysDate()}/${this.props.category}`
-                )
-                .set(finalGoals);
-            }}
-            afterSubmit={() => Promise.resolve()}
-            buttonText="Commit"
-            fields={goalFields}
-          />
+        <View style={styles.header}>
+          <View style={styles.logo}>
+            <WhiteBackgroundLogo category={this.props.category} />
+          </View>
         </View>
+        {goals.length > 0 ? (
+          <Text>Has goals</Text>
+        ) : (
+          <Link
+            action={StackActions.push('EditGoals', {
+              category: this.props.category,
+            })}>
+            Create some goals
+          </Link>
+        )}
       </View>
     );
   }
@@ -104,10 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  formContainer: { flex: 2 },
   header: {
-    flex: 1,
-    justifyContent: 'flex-end',
     alignItems: 'center',
   },
 
