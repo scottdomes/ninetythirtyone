@@ -15,6 +15,7 @@ import * as firebase from 'firebase';
 import { getTodaysDate } from '../utils/date';
 import { Ionicons } from '@expo/vector-icons';
 import WhiteBackgroundLogo from '../logos/WhiteBackgroundLogo';
+import uid from 'uid';
 
 const getNextScreen = (category) => {
   if (category === 'ninety') {
@@ -46,9 +47,9 @@ class EditCategoryView extends React.Component {
               const user = await firebase.auth().currentUser;
               const userId = user.uid;
               const finalGoals = [
-                { name: goal1, complete: false, category },
-                { name: goal2, complete: false, category },
-                { name: goal3, complete: false, category },
+                { name: goal1, complete: false, category, id: uid() },
+                { name: goal2, complete: false, category, id: uid() },
+                { name: goal3, complete: false, category, id: uid() },
               ];
               return firebase
                 .database()

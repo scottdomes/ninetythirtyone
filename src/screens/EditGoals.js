@@ -1,14 +1,16 @@
 import React from 'react';
 import EditCategoryView from '../components/EditCategoryView';
 
-const NinetyDayView = ({ navigation }) => {
+const EditGoals = ({ navigation, route }) => {
+  const { category } = route.params;
+
   return (
     <EditCategoryView
       navigation={navigation}
-      category="ninety"
+      category={category}
       headerText="Goals for the next 90 days"
     />
   );
 };
 
-export default NinetyDayView;
+export default EditGoals;

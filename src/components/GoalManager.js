@@ -67,10 +67,7 @@ export default class GoalManager extends React.Component {
 
   componentWillUnmount() {
     if (this.props.userId) {
-      firebase
-        .database()
-        .ref(`/users/${this.props.userId}/`)
-        .off('value');
+      firebase.database().ref(`/users/${this.props.userId}/`).off('value');
     }
   }
 
@@ -79,7 +76,13 @@ export default class GoalManager extends React.Component {
       .database()
       .ref(`/users/${this.props.userId}/`)
       .on('value', (data) => {
-        this.setState({ loaded: true, goals: data.val() });
+        if (data.val()) {
+          const goalGroups = Object.values(data.val());
+          const goalList = goalGroups.reduce((a, b) => a.concat(b), []);
+          this.setState({ loaded: true, goals: goalList });
+        } else {
+          this.setState({ loaded: true, goals: [] });
+        }
       });
   }
 

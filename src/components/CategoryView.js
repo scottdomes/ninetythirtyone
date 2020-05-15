@@ -40,8 +40,11 @@ class CategoryView extends React.Component {
   }
 
   render() {
-    const goals = this.context || [];
-
+    const { category } = this.props;
+    const allGoals = this.context;
+    const goals = allGoals.filter(
+      (goal) => !goal.complete && goal.category === category
+    );
     console.log(goals);
     return (
       <View style={styles.container} behavior="padding" enabled>
@@ -51,11 +54,11 @@ class CategoryView extends React.Component {
           </View>
         </View>
         {goals.length > 0 ? (
-          <Text>Has goals</Text>
+          goals.map((goal) => <Text key={goal.id}>{goal.name}</Text>)
         ) : (
           <Link
             action={StackActions.push('EditGoals', {
-              category: this.props.category,
+              category,
             })}>
             Create some goals
           </Link>
