@@ -4,55 +4,10 @@ import { getTodaysDate } from '../utils/date';
 import * as firebase from 'firebase';
 import GoalContext from '../components/GoalContext';
 
-const defaultGoals = {
-  ninety: [
-    {
-      name: '',
-      complete: false,
-    },
-    {
-      name: '',
-      complete: false,
-    },
-    {
-      name: '',
-      complete: false,
-    },
-  ],
-  thirty: [
-    {
-      name: '',
-      complete: false,
-    },
-    {
-      name: '',
-      complete: false,
-    },
-    {
-      name: '',
-      complete: false,
-    },
-  ],
-  one: [
-    {
-      name: '',
-      complete: false,
-    },
-    {
-      name: '',
-      complete: false,
-    },
-    {
-      name: '',
-      complete: false,
-    },
-  ],
-};
-
 export default class GoalManager extends React.Component {
   state = {
     loaded: false,
-    goals: { ...defaultGoals },
+    goals: [],
   };
 
   componentDidMount() {
@@ -67,19 +22,25 @@ export default class GoalManager extends React.Component {
 
   componentWillUnmount() {
     if (this.props.userId) {
-      firebase.database().ref(`/users/${this.props.userId}/`).off('value');
+      firebase
+        .database()
+        .ref(`/users/${this.props.userId}/goals/`)
+        .off('value');
     }
   }
 
   listenForGoals() {
     firebase
       .database()
-      .ref(`/users/${this.props.userId}/`)
+      .ref(`/users/${this.props.userId}/goals/`)
       .on('value', (data) => {
-        if (data.val()) {
-          const goalGroups = Object.values(data.val());
-          const goalList = goalGroups.reduce((a, b) => a.concat(b), []);
-          this.setState({ loaded: true, goals: goalList });
+        const goalObject = data.val();
+        if (goalObject) {
+          const goals = Object.keys(goalObject).map((key) => {
+            const goal = goalObject[key];
+            return { ...goal, id: key };
+          });
+          this.setState({ loaded: true, goals });
         } else {
           this.setState({ loaded: true, goals: [] });
         }

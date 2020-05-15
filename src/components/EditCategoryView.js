@@ -31,12 +31,14 @@ const getNextScreen = (category) => {
 
 class EditCategoryView extends React.Component {
   render() {
-    const { category, navigation } = this.props;
+    const { category, navigation, goals } = this.props;
     const fields = {
-      goal1: {},
-      goal2: {},
-      goal3: {},
+      goal1: goals ? goals[0] : {},
+      goal2: goals ? goals[1] : {},
+      goal3: goals ? goals[2] : {},
     };
+
+    console.log(fields, goals);
 
     return (
       <View style={styles.container} behavior="padding" enabled>
@@ -46,15 +48,23 @@ class EditCategoryView extends React.Component {
             action={async (goal1, goal2, goal3) => {
               const user = await firebase.auth().currentUser;
               const userId = user.uid;
-              const finalGoals = [
-                { name: goal1, complete: false, category, id: uid() },
-                { name: goal2, complete: false, category, id: uid() },
-                { name: goal3, complete: false, category, id: uid() },
-              ];
-              return firebase
-                .database()
-                .ref(`/users/${userId}/`)
-                .push(finalGoals);
+
+              const getRef = () => `/users/${userId}/goals/${uid()}/`;
+
+              return Promise.all([
+                firebase
+                  .database()
+                  .ref(getRef())
+                  .set({ name: goal1, complete: false, category }),
+                firebase
+                  .database()
+                  .ref(getRef())
+                  .set({ name: goal2, complete: false, category }),
+                firebase
+                  .database()
+                  .ref(getRef())
+                  .set({ name: goal3, complete: false, category }),
+              ]);
             }}
             afterSubmit={() =>
               navigation.navigate('Main', { screen: getNextScreen(category) })

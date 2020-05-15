@@ -54,7 +54,18 @@ class CategoryView extends React.Component {
           </View>
         </View>
         {goals.length > 0 ? (
-          goals.map((goal) => <Text key={goal.id}>{goal.name}</Text>)
+          <View>
+            {goals.map((goal) => (
+              <Text key={goal.id}>{goal.name}</Text>
+            ))}
+            <Link
+              action={StackActions.push('EditGoals', {
+                category,
+                goals,
+              })}>
+              Edit goals
+            </Link>
+          </View>
         ) : (
           <Link
             action={StackActions.push('EditGoals', {
