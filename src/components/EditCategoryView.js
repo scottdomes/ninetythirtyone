@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import GoalContext from '../components/GoalContext';
 import GoalCheckmark from '../components/GoalCheckmark';
-import Form from '../forms/Form';
+import Form from '../forms/contextual/ContextForm';
+import ContextFormButton from '../forms/contextual/ContextFormButton';
 import { validateContent } from '../forms/validation';
 import * as firebase from 'firebase';
 import { getTodaysDate } from '../utils/date';
@@ -71,6 +72,7 @@ class EditCategoryView extends React.Component {
             }
             buttonText="Commit"
             fields={fields}
+            renderButton={() => <ContextFormButton title="Commit" />}
           />
         </View>
       </View>

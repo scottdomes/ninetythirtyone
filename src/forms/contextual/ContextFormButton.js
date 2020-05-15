@@ -1,0 +1,105 @@
+import React, { useState } from 'react';
+import {
+  TouchableWithoutFeedback,
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  ActivityIndicator,
+} from 'react-native';
+import AnimatedGradient from '../AnimatedGradient';
+import { GRADIENT_COLORS, GRADIENT_ORIENTATIONS } from '../constants';
+import { FormContext } from './ContextForm';
+
+const SubmitButton = ({ title, onPress, isSubmitting, disabled }) => {
+  const [offset] = useState(new Animated.Value(1));
+  const [scale] = useState(new Animated.Value(1));
+
+  const handlePress = async (formContext) => {
+    if (disabled) {
+      return;
+    }
+
+    Animated.spring(offset, {
+      toValue: 5,
+    }).start();
+    Animated.spring(scale, {
+      toValue: 0.96,
+    }).start();
+
+    await formContext.submit();
+    Animated.spring(offset, {
+      toValue: 0,
+    }).start();
+    Animated.spring(scale, {
+      toValue: 1,
+    }).start();
+  };
+
+  const transform = [
+    { translateY: offset },
+    { scaleY: scale },
+    { scaleX: scale },
+  ];
+
+  return (
+    <FormContext.Consumer>
+      {(formContext) => (
+        <TouchableWithoutFeedback onPressIn={() => handlePress(formContext)}>
+          <Animated.View
+            style={
+              disabled
+                ? { transform, ...styles.container, ...styles.disabled }
+                : { transform, ...styles.container }
+            }>
+            <AnimatedGradient
+              orientation={
+                isSubmitting
+                  ? GRADIENT_ORIENTATIONS[1]
+                  : GRADIENT_ORIENTATIONS[0]
+              }
+              colors={GRADIENT_COLORS}
+              style={{ borderRadius: 8 }}>
+              <View style={styles.container}>
+                {formContext.isSubmitting ? (
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.text}>{title}</Text>
+                )}
+              </View>
+            </AnimatedGradient>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      )}
+    </FormContext.Consumer>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    width: 250,
+    elevation: 4,
+    borderRadius: 8,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  text: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+});
+
+export default SubmitButton;
