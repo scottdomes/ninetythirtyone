@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { FormContext } from './ContextForm';
 import AnimatedGradient from '../AnimatedGradient';
 import { GRADIENT_COLORS, GRADIENT_ORIENTATIONS } from '../constants';
 
-const ContextField = ({ startingValue }) => {
-  const [value, setValue] = useState(startingValue);
+const ContextFieldWrapper = (props) => {
   return (
     <FormContext.Consumer>
-      {(formContext) => (
-        <View style={styles.inputContainer}>
-          <AnimatedGradient
-            orientation={GRADIENT_ORIENTATIONS[0]}
-            colors={GRADIENT_COLORS}
-            style={styles.inputGradient}>
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={(text) => setValue(text)}
-            />
-          </AnimatedGradient>
-        </View>
-      )}
+      {(formContext) => <ContextField {...props} formContext={formContext} />}
     </FormContext.Consumer>
+  );
+};
+
+const ContextField = ({ startingValue, id, formContext }) => {
+  const value = formContext.getValue(id);
+
+  return (
+    <View style={styles.inputContainer}>
+      <AnimatedGradient
+        orientation={GRADIENT_ORIENTATIONS[0]}
+        colors={GRADIENT_COLORS}
+        style={styles.inputGradient}>
+        <TextInput
+          style={styles.input}
+          value={value === undefined ? startingValue : value}
+          onChangeText={(text) => formContext.setValue(id, text)}
+        />
+      </AnimatedGradient>
+    </View>
   );
 };
 
@@ -52,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ContextField;
+export default ContextFieldWrapper;

@@ -74,7 +74,11 @@ class EditCategoryView extends React.Component {
             }
             buttonText="Commit"
             fields={goals.map((goal) => (
-              <ContextField key={goal.id} startingValue={goal.name} />
+              <ContextField
+                key={goal.id}
+                startingValue={goal.name}
+                id={goal.id}
+              />
             ))}
             renderButton={() => <ContextFormButton title="Commit" />}
           />

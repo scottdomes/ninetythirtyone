@@ -30,9 +30,23 @@ const Form = ({
     return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
+  const [values, setValues] = useState({});
+
+  const getValue = (id) => {
+    return values[id];
+  };
+
+  const setValue = (id, value) => {
+    const newValues = { ...values };
+    newValues[id] = value;
+    setValues(newValues);
+  };
+
   const context = {
     isSubmitting,
     submit,
+    setValue,
+    getValue,
   };
 
   return (
@@ -43,7 +57,6 @@ const Form = ({
         </View>
         <Animated.View style={{ opacity }}>
           <SubmittingIndicator isSubmitting={isSubmitting} />
-          <Text>{isSubmitting ? 'SubmittingIndicator' : 'nay'}</Text>
           {fields}
         </Animated.View>
         <View style={styles.buttonContainer}>{renderButton()}</View>
@@ -52,9 +65,6 @@ const Form = ({
   );
 };
 
-          // {fields.map((field) => (
-          //   <View key={field.id}>{field.render()}</View>
-          // ))}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
