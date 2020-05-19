@@ -47,7 +47,7 @@ function App() {
           name="EditGoals"
           component={EditGoals}
           options={{
-            headerShown: false,
+            headerShown: true,
           }}
         />
         <Stack.Screen name="Settings" component={Settings} />

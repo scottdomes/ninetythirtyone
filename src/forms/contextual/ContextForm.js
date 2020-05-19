@@ -43,6 +43,9 @@ const Form = ({
 
     setSubmitting(false);
     fadeIn();
+
+    afterSubmit();
+
     return Promise.resolve();
   };
 

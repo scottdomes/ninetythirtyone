@@ -44,7 +44,7 @@ class EditCategoryView extends React.Component {
     console.log(fields, goals);
 
     return (
-      <View style={styles.container} behavior="padding" enabled>
+      <View style={styles.container}>
         <View styles={styles.formContainer}>
           <Form
             headerText={this.props.headerText}

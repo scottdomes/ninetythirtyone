@@ -17,6 +17,7 @@ import { getTodaysDate } from '../utils/date';
 import { Ionicons } from '@expo/vector-icons';
 import WhiteBackgroundLogo from '../logos/WhiteBackgroundLogo';
 import Button from './Button';
+import GoalDisplay from '../components/GoalDisplay';
 
 class CategoryView extends React.Component {
   static contextType = GoalContext;
@@ -54,16 +55,16 @@ class CategoryView extends React.Component {
           </View>
         </View>
         {goals.length > 0 ? (
-          <View>
+          <View style={styles.goalContainer}>
             {goals.map((goal) => (
-              <Text key={goal.id}>{goal.name}</Text>
+              <GoalDisplay key={goal.id} goal={goal} />
             ))}
             <Link
               action={StackActions.push('EditGoals', {
                 category,
                 goals,
               })}>
-              Edit goals
+              Edit
             </Link>
           </View>
         ) : (
@@ -88,8 +89,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  goalContainer: {
+    flex: 2, 
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: 350,
+    marginTop: 40
+  },
   header: {
-    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex: 1, 
+
   },
 
   logo: {
