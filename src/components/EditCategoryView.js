@@ -48,26 +48,18 @@ class EditCategoryView extends React.Component {
         <View styles={styles.formContainer}>
           <Form
             headerText={this.props.headerText}
-            action={async (goal1, goal2, goal3) => {
+            action={async (values) => {
               const user = await firebase.auth().currentUser;
               const userId = user.uid;
 
-              const getRef = () => `/users/${userId}/goals/${uid()}/`;
+              const promises = Object.keys(values).map((key) => {
+                return firebase
+                  .database()
+                  .ref(`/users/${userId}/goals/${key}/`)
+                  .update({ name: values[key] });
+              });
 
-              return Promise.all([
-                firebase
-                  .database()
-                  .ref(getRef())
-                  .set({ name: goal1, complete: false, category }),
-                firebase
-                  .database()
-                  .ref(getRef())
-                  .set({ name: goal2, complete: false, category }),
-                firebase
-                  .database()
-                  .ref(getRef())
-                  .set({ name: goal3, complete: false, category }),
-              ]);
+              return promises;
             }}
             afterSubmit={() =>
               navigation.navigate('Main', { screen: getNextScreen(category) })

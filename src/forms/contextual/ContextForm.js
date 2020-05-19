@@ -11,6 +11,8 @@ import {
 import SubmittingIndicator from '../SubmittingIndicator';
 
 export const FormContext = React.createContext('form');
+const animationTimeout = () =>
+  new Promise((resolve) => setTimeout(resolve, 700));
 
 const Form = ({
   fields,
@@ -23,14 +25,26 @@ const Form = ({
   const [opacity] = useState(new Animated.Value(1));
   const [isSubmitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [values, setValues] = useState({});
+
+  const fadeOut = () =>
+    Animated.timing(opacity, { toValue: 0.2, duration: 200 }).start();
+
+  const fadeIn = () =>
+    Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
+
   const submit = async () => {
     setSubmitting(true);
     setErrorMessage('');
     Keyboard.dismiss();
-    return new Promise((resolve) => setTimeout(resolve, 1000));
-  };
+    fadeOut();
 
-  const [values, setValues] = useState({});
+    await Promise.all([action(values), animationTimeout()]);
+
+    setSubmitting(false);
+    fadeIn();
+    return Promise.resolve();
+  };
 
   const getValue = (id) => {
     return values[id];
