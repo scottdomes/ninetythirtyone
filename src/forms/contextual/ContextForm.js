@@ -12,7 +12,14 @@ import SubmittingIndicator from '../SubmittingIndicator';
 
 export const FormContext = React.createContext('form');
 
-const Form = ({ fields, buttonText, action, afterSubmit, renderButton }) => {
+const Form = ({
+  fields,
+  buttonText,
+  action,
+  afterSubmit,
+  renderButton,
+  renderFields,
+}) => {
   const [opacity] = useState(new Animated.Value(1));
   const [isSubmitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -37,6 +44,7 @@ const Form = ({ fields, buttonText, action, afterSubmit, renderButton }) => {
         <Animated.View style={{ opacity }}>
           <SubmittingIndicator isSubmitting={isSubmitting} />
           <Text>{isSubmitting ? 'SubmittingIndicator' : 'nay'}</Text>
+          {fields}
         </Animated.View>
         <View style={styles.buttonContainer}>{renderButton()}</View>
       </KeyboardAvoidingView>
@@ -44,6 +52,9 @@ const Form = ({ fields, buttonText, action, afterSubmit, renderButton }) => {
   );
 };
 
+          // {fields.map((field) => (
+          //   <View key={field.id}>{field.render()}</View>
+          // ))}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -58,5 +69,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
+
+Form.defaultProps = {
+  renderFields: () => null,
+  renderButton: () => null,
+};
 
 export default Form;

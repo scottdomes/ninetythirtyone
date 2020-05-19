@@ -11,6 +11,8 @@ import GoalContext from '../components/GoalContext';
 import GoalCheckmark from '../components/GoalCheckmark';
 import Form from '../forms/contextual/ContextForm';
 import ContextFormButton from '../forms/contextual/ContextFormButton';
+import ContextField from '../forms/contextual/ContextField';
+
 import { validateContent } from '../forms/validation';
 import * as firebase from 'firebase';
 import { getTodaysDate } from '../utils/date';
@@ -71,7 +73,9 @@ class EditCategoryView extends React.Component {
               navigation.navigate('Main', { screen: getNextScreen(category) })
             }
             buttonText="Commit"
-            fields={fields}
+            fields={goals.map((goal) => (
+              <ContextField key={goal.id} startingValue={goal.name} />
+            ))}
             renderButton={() => <ContextFormButton title="Commit" />}
           />
         </View>
